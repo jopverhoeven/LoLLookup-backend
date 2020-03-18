@@ -11,6 +11,9 @@ export const API_SUMMONER_BY_NAME_URL = 'summoner/v4/summoners/by-name/';
 //Mastery
 export const API_MASTERY_BY_ID_URL = 'champion-mastery/v4/champion-masteries/by-summoner/'
 
+//Ranked
+export const API_RANKED_BY_ID_URL = 'league/v4/entries/by-summoner/';
+
 //Champion
 export const DATA_DRAGON_CHAMPION_URL = DATA_DRAGON + 'champion.json';
 
@@ -25,5 +28,9 @@ export class Api {
 
     getChampionDataURL() {
         return DATA_DRAGON_CHAMPION_URL;
+    }
+
+    getRankedURL(id: string) {
+        return API_URL + API_RANKED_BY_ID_URL + id + API_KEY_PARAMETER + API_KEY;
     }
 }
