@@ -1,7 +1,7 @@
+import { MatchExternal } from './../../models/external/match/match.external';
 import { Controller, Get, Query } from '@nestjs/common';
 import { MatchService } from './match.service';
 import { MatchListExternal } from 'src/models/external/match/matchlist.external';
-import { MatchDTO } from 'src/models/dto/match/match.dto';
 
 @Controller('match')
 export class MatchController {
@@ -25,14 +25,14 @@ export class MatchController {
 
     @Get('game')
     async getGameByMatchId(@Query() query: string) {
-        let matchDTO: MatchDTO;
+        let matchExternal: MatchExternal;
 
-        await this.matchService.getMatchDataFromMatchId(query['id']).then(
+        await this.matchService.getMatchDataFromMatchId(query['gameId'], query['summonerId']).then(
             data => {
-                matchDTO = data;
+                matchExternal = data;
             }
         );
 
-        return matchDTO;
+        return matchExternal;
     }
 }
