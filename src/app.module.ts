@@ -5,11 +5,12 @@ import { ChampionModule } from './endpoints/champion/champion.module';
 import { MasteryModule } from './endpoints/mastery/mastery.module';
 import { SummonerModule } from './endpoints/summoner/summoner.module';
 import { RankedModule } from './endpoints/ranked/ranked.module';
+import { MatchModule } from './endpoints/match/match.module';
 
 @Module({
-  imports: [HttpModule, MasteryModule, SummonerModule, ChampionModule, RankedModule],
+  imports: [HttpModule, MasteryModule, SummonerModule, ChampionModule, RankedModule, MatchModule],
   controllers: [AppController,],
-  providers: [AppService],
+  providers: [AppService,],
 })
 export class AppModule {
   
