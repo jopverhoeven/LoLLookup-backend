@@ -27,17 +27,6 @@ class Api {
         return exports.API_URL + exports.API_RANKED_BY_ID_URL + id + exports.API_KEY_PARAMETER + Keys_1.API_KEY;
     }
     getMatchHistoryURL(accountId, start, end) {
-        if (start === undefined || parseInt(start) == NaN)
-            start = "";
-        if (end === undefined || parseInt(end) == NaN)
-            end = "";
-        if (start >= end || end < start) {
-            start = "0";
-            end = "0";
-        }
-        if (parseInt(end) - parseInt(start) > 5) {
-            start = "" + (parseInt(end) - 5);
-        }
         const url = exports.API_URL + exports.API_MATCH_HISTORY_URL + accountId + exports.API_KEY_PARAMETER + Keys_1.API_KEY + '&beginIndex=' + start + '&endIndex=' + end;
         return url;
     }
