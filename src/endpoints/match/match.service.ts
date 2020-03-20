@@ -35,7 +35,6 @@ export class MatchService {
       matchExternal.gameId = matchDTO.gameId;
       matchExternal.queueType = QueueType['QUEUE_' + matchDTO.queueId];
       matchExternal.gameCreation = new Date(matchDTO.gameCreation - matchDTO.gameDuration);
-      console.log(matchExternal.gameCreation);
       matchExternal.gameDuration = matchDTO.gameDuration;
       
       let participantId: number;
@@ -48,6 +47,15 @@ export class MatchService {
       Object.values(matchDTO.participants).forEach(element => {
         if (element.participantId == participantId) {
           matchExternal.championId = element.championId;
+          matchExternal.kills = element['stats']['kills'];
+          matchExternal.deaths = element['stats']['deaths'];
+          matchExternal.assists = element['stats']['assists'];
+          const teamId = element['teamId'];
+          matchDTO.teams.forEach(element => {
+            if (element.teamId == teamId) {
+              matchExternal.won = (element.win === "Win" ? true : false);
+            }
+          });
         }
       });
 
