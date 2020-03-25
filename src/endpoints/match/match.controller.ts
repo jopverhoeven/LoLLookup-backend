@@ -11,7 +11,7 @@ export class MatchController {
     async getMatchHistoryByAccountId(@Query() query: string) {
         let matchHistoryExternal: MatchListExternal;
 
-        await this.matchService.getMatchHistoryByAccountId(query['id'], query['start'], query['end']).then(
+        await this.matchService.getMatchHistoryByAccountId(query['id'], query['region'], query['start'], query['end']).then(
             data => {
                 matchHistoryExternal = data;
                 matchHistoryExternal.matches.forEach(element => {
@@ -27,7 +27,7 @@ export class MatchController {
     async getGameByMatchId(@Query() query: string) {
         let matchExternal: MatchExternal;
 
-        await this.matchService.getMatchDataFromMatchId(query['gameId'], query['summonerId']).then(
+        await this.matchService.getMatchDataFromMatchId(query['gameId'], query['summonerId'], query['region']).then(
             data => {
                 matchExternal = data;
             }

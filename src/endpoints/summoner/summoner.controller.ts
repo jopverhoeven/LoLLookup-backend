@@ -14,10 +14,10 @@ export class SummonerController {
   async getSummonerByName(@Query() query: string): Promise<SummonerExternal> {
     let summonerExternal: SummonerExternal;
     await this.summonerService
-      .getSummonerByName(query['name'])
+      .getSummonerByName(query['name'], query['region'])
       .then(data => (summonerExternal = data));
     await this.masteryService
-      .getChampionMasteryById(summonerExternal.id)
+      .getChampionMasteryById(summonerExternal.id, query['region'])
       .then(data => {
         summonerExternal.mastery = data;
       });

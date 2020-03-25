@@ -2,15 +2,14 @@ import { Injectable, HttpService, OnModuleInit } from '@nestjs/common';
 import { Api } from 'src/constants/Api';
 import { map } from 'rxjs/internal/operators/map';
 import { Champion } from 'src/models/internal/champion/champion.internal';
+import { CHAMPION_LIST } from 'src/constants/Champion';
 
 @Injectable()
 export class ChampionService implements OnModuleInit {
   private _api: Api = new Api();
   private championData;
-  private championIdToChampion: Map<number, Champion>;
 
   async onModuleInit() {
-    this.championIdToChampion = new Map();
     await this.getChampionData().then(data => {
       this.championData = data;
       this.sortChampionData();
@@ -23,17 +22,22 @@ export class ChampionService implements OnModuleInit {
   sortChampionData() {
     Object.keys(this.championData['data']).forEach(championKey => {
       const championSpecific = this.championData['data'][championKey];
-      const championSpecificKey = championSpecific['key'];
 
       const champion: Champion = new Champion();
+      champion.id = championSpecific['key'];
       champion.name = championSpecific['name'];
       champion.devname = championSpecific['id'];
 
-      this.championIdToChampion.set(championSpecificKey, champion);
+      champion.tags = [];
+      championSpecific['tags'].forEach(element => {
+        champion.tags.push(element);
+      });
+
+      CHAMPION_LIST.push(champion);
     });
   }
 
-  async getChampionData() {
+  private async getChampionData() {
     let championObject;
 
     await this.httpService
@@ -48,7 +52,18 @@ export class ChampionService implements OnModuleInit {
     return championObject;
   }
 
+  getChampionList(): Champion[] {
+    return CHAMPION_LIST;
+  }
+
   getChampionById(id: number): Champion {
-    return this.championIdToChampion.get(id);
+    for (let index = 0; index < CHAMPION_LIST.length; index++) {
+      const element = CHAMPION_LIST[index];
+      if (element.id == id) {
+        return element;
+      }
+    }
+
+    return null;
   }
 }

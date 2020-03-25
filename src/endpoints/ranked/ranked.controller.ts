@@ -10,7 +10,7 @@ export class RankedController {
     async getRankedDataBySummonerId(@Query() query: string): Promise<RankedExternal[]> {
         let rankedExternal: RankedExternal[];
 
-        await this.rankedService.getRankedDataBySummonerId(query['id'])
+        await this.rankedService.getRankedDataBySummonerId(query['id'], query['region'])
         .then(
             data => rankedExternal = data
         );
