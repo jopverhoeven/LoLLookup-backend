@@ -4,10 +4,10 @@ export declare class ChampionService implements OnModuleInit {
     private httpService;
     private _api;
     private championData;
-    private championIdToChampion;
     onModuleInit(): Promise<void>;
     constructor(httpService: HttpService);
     sortChampionData(): void;
-    getChampionData(): Promise<any>;
+    private getChampionData;
+    getChampionList(): Champion[];
     getChampionById(id: number): Champion;
 }

@@ -18,12 +18,13 @@ const ranked_enum_1 = require("../../models/enums/ranked.enum");
 let RankedService = class RankedService {
     constructor(httpService) {
         this.httpService = httpService;
-        this._api = new Api_1.Api();
     }
-    async getRankedDataBySummonerId(id) {
+    async getRankedDataBySummonerId(id, region) {
+        const api = new Api_1.Api();
+        api.setRegion(region);
         let rankedDTO;
         await this.httpService
-            .get(this._api.getRankedURL(id))
+            .get(api.getRankedURL(id))
             .pipe(map_1.map(response => (rankedDTO = response.data)))
             .toPromise();
         const ranked = rankedDTO;

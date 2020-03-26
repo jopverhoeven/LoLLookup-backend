@@ -15,26 +15,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const ranked_service_1 = require("./ranked.service");
 const ranked_external_1 = require("../../models/external/ranked/ranked.external");
+const ranked_params_1 = require("./params/ranked.params");
 let RankedController = class RankedController {
     constructor(rankedService) {
         this.rankedService = rankedService;
     }
-    async getRankedDataBySummonerId(query) {
+    async getRankedDataBySummonerId(params) {
         let rankedExternal;
-        await this.rankedService.getRankedDataBySummonerId(query['id'])
+        await this.rankedService.getRankedDataBySummonerId(params.summonerId, params.region)
             .then(data => rankedExternal = data);
         return rankedExternal;
     }
 };
 __decorate([
-    common_1.Get(),
-    __param(0, common_1.Query()),
+    common_1.Get(':summonerId'),
+    __param(0, common_1.Param()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [ranked_params_1.RankedParams]),
     __metadata("design:returntype", Promise)
 ], RankedController.prototype, "getRankedDataBySummonerId", null);
 RankedController = __decorate([
-    common_1.Controller('ranked'),
+    common_1.Controller(':region/ranked'),
     __metadata("design:paramtypes", [ranked_service_1.RankedService])
 ], RankedController);
 exports.RankedController = RankedController;

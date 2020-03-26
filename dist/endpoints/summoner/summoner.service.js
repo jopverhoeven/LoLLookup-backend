@@ -17,17 +17,16 @@ const operators_1 = require("rxjs/operators");
 let SummonerService = class SummonerService {
     constructor(httpService) {
         this.httpService = httpService;
-        this._api = new Api_1.Api();
     }
-    async getSummonerByName(name) {
+    async getSummonerByName(name, region) {
+        const api = new Api_1.Api();
+        api.setRegion(region);
         let summonerDTO;
-        await this.httpService.get(this._api.getSummonerURL(name))
-            .pipe(operators_1.map(response => summonerDTO = response.data))
+        await this.httpService
+            .get(api.getSummonerURL(name))
+            .pipe(operators_1.map(response => (summonerDTO = response.data)))
             .toPromise();
         return summonerDTO;
-    }
-    getSummonerById(id) {
-        return new summoner_internal_1.Summoner();
     }
 };
 SummonerService = __decorate([

@@ -15,20 +15,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const champion_service_1 = require("./champion.service");
 const champion_external_1 = require("../../models/external/champion/champion.external");
+const champion_params_1 = require("./champion.params");
 let ChampionController = class ChampionController {
     constructor(championService) {
         this.championService = championService;
     }
-    async getChampions(query) {
-        const externalChampion = this.championService.getChampionById(query['id']);
+    async getChampionList() {
+        return this.championService.getChampionList();
+    }
+    async getChampions(params) {
+        const externalChampion = this.championService.getChampionById(params.championId);
+        if (externalChampion == null) {
+            throw new common_1.HttpException('Champion Not Found', common_1.HttpStatus.BAD_REQUEST);
+        }
         return externalChampion;
     }
 };
 __decorate([
-    common_1.Get(),
-    __param(0, common_1.Query()),
+    common_1.Get('all'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ChampionController.prototype, "getChampionList", null);
+__decorate([
+    common_1.Get(':championId'),
+    __param(0, common_1.Param()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [champion_params_1.ChampionParams]),
     __metadata("design:returntype", Promise)
 ], ChampionController.prototype, "getChampions", null);
 ChampionController = __decorate([

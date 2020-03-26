@@ -1,5 +1,4 @@
 import { ISummoner } from 'src/models/interfaces/summoner/summoner.interface';
-import { MasteryExternal } from '../mastery/mastery.external';
 export declare class SummonerExternal implements ISummoner {
     profileIconId: number;
     name: string;
@@ -8,5 +7,4 @@ export declare class SummonerExternal implements ISummoner {
     revisionDate: number;
     id: string;
     accountId: string;
-    mastery?: MasteryExternal[];
 }

@@ -13,13 +13,13 @@ const common_1 = require("@nestjs/common");
 const Api_1 = require("../../constants/Api");
 const map_1 = require("rxjs/internal/operators/map");
 const champion_internal_1 = require("../../models/internal/champion/champion.internal");
+const Champion_1 = require("../../constants/Champion");
 let ChampionService = class ChampionService {
     constructor(httpService) {
         this.httpService = httpService;
         this._api = new Api_1.Api();
     }
     async onModuleInit() {
-        this.championIdToChampion = new Map();
         await this.getChampionData().then(data => {
             this.championData = data;
             this.sortChampionData();
@@ -29,11 +29,15 @@ let ChampionService = class ChampionService {
     sortChampionData() {
         Object.keys(this.championData['data']).forEach(championKey => {
             const championSpecific = this.championData['data'][championKey];
-            const championSpecificKey = championSpecific['key'];
             const champion = new champion_internal_1.Champion();
+            champion.id = championSpecific['key'];
             champion.name = championSpecific['name'];
             champion.devname = championSpecific['id'];
-            this.championIdToChampion.set(championSpecificKey, champion);
+            champion.tags = [];
+            championSpecific['tags'].forEach(element => {
+                champion.tags.push(element);
+            });
+            Champion_1.CHAMPION_LIST.push(champion);
         });
     }
     async getChampionData() {
@@ -46,8 +50,17 @@ let ChampionService = class ChampionService {
             .toPromise();
         return championObject;
     }
+    getChampionList() {
+        return Champion_1.CHAMPION_LIST;
+    }
     getChampionById(id) {
-        return this.championIdToChampion.get(id);
+        for (let index = 0; index < Champion_1.CHAMPION_LIST.length; index++) {
+            const element = Champion_1.CHAMPION_LIST[index];
+            if (element.id == id) {
+                return element;
+            }
+        }
+        return null;
     }
 };
 ChampionService = __decorate([

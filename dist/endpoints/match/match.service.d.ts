@@ -4,7 +4,6 @@ import { MatchList } from 'src/models/internal/match/matchlist.internal';
 export declare class MatchService {
     private httpService;
     constructor(httpService: HttpService);
-    private _api;
-    getMatchHistoryByAccountId(accountId: string, start?: string, end?: string): Promise<MatchList>;
-    getMatchDataFromMatchId(matchId: string, summonerId: string): Promise<MatchExternal>;
+    getMatchHistoryByAccountId(accountId: string, region: string, start?: string, end?: string): Promise<MatchList>;
+    getMatchDataByMatchId(matchId: string, summonerId: string, region: string): Promise<MatchExternal>;
 }

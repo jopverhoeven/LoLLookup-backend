@@ -20,21 +20,24 @@ const queue_enum_1 = require("../../models/enums/queue.enum");
 let MatchService = class MatchService {
     constructor(httpService) {
         this.httpService = httpService;
-        this._api = new Api_1.Api();
     }
-    async getMatchHistoryByAccountId(accountId, start, end) {
+    async getMatchHistoryByAccountId(accountId, region, start, end) {
+        const api = new Api_1.Api();
+        api.setRegion(region);
         let matchListDTO;
         await this.httpService
-            .get(this._api.getMatchHistoryURL(accountId, start, end))
+            .get(api.getMatchHistoryURL(accountId, start, end))
             .pipe(operators_1.map(response => (matchListDTO = response.data)))
             .toPromise();
         const matchList = matchListDTO;
         return matchList;
     }
-    async getMatchDataFromMatchId(matchId, summonerId) {
+    async getMatchDataByMatchId(matchId, summonerId, region) {
+        const api = new Api_1.Api();
+        api.setRegion(region);
         let matchDTO;
         await this.httpService
-            .get(this._api.getMatchDataURL(matchId))
+            .get(api.getMatchDataURL(matchId))
             .pipe(operators_1.map(response => (matchDTO = response.data)))
             .toPromise();
         const matchExternal = new match_external_1.MatchExternal();
@@ -57,7 +60,7 @@ let MatchService = class MatchService {
                 const teamId = element['teamId'];
                 matchDTO.teams.forEach(element => {
                     if (element.teamId == teamId) {
-                        matchExternal.won = (element.win === "Win" ? true : false);
+                        matchExternal.won = element.win === 'Win' ? true : false;
                     }
                 });
             }
