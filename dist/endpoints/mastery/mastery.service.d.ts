@@ -5,6 +5,5 @@ export declare class MasteryService {
     private httpService;
     private championService;
     constructor(httpService: HttpService, championService: ChampionService);
-    private _api;
-    getChampionMasteryById(id: string): Promise<Mastery[]>;
+    getChampionMasteryById(id: string, region: string): Promise<Mastery[]>;
 }

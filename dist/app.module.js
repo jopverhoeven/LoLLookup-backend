@@ -14,12 +14,13 @@ const mastery_module_1 = require("./endpoints/mastery/mastery.module");
 const summoner_module_1 = require("./endpoints/summoner/summoner.module");
 const ranked_module_1 = require("./endpoints/ranked/ranked.module");
 const match_module_1 = require("./endpoints/match/match.module");
+const region_module_1 = require("./endpoints/region/region.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [common_1.HttpModule, mastery_module_1.MasteryModule, summoner_module_1.SummonerModule, champion_module_1.ChampionModule, ranked_module_1.RankedModule, match_module_1.MatchModule],
-        controllers: [app_controller_1.AppController,],
+        imports: [common_1.HttpModule, mastery_module_1.MasteryModule, summoner_module_1.SummonerModule, champion_module_1.ChampionModule, ranked_module_1.RankedModule, match_module_1.MatchModule, region_module_1.RegionModule],
+        controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService,],
     })
 ], AppModule);

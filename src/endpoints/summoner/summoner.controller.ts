@@ -1,26 +1,27 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { SummonerService } from './summoner.service';
 import { SummonerExternal } from 'src/models/external/summoner/summoner.external';
 import { MasteryService } from '../mastery/mastery.service';
+import { SummonerParams } from './params/summoner.params';
 
-@Controller('summoner')
+@Controller(':region/summoner')
 export class SummonerController {
   constructor(
     private summonerService: SummonerService,
     private masteryService: MasteryService,
   ) {}
 
-  @Get()
-  async getSummonerByName(@Query() query: string): Promise<SummonerExternal> {
+  @Get(':name')
+  async getSummonerByName(@Param() params: SummonerParams): Promise<SummonerExternal> {
     let summonerExternal: SummonerExternal;
     await this.summonerService
-      .getSummonerByName(query['name'])
+      .getSummonerByName(params.name, params.region)
       .then(data => (summonerExternal = data));
-    await this.masteryService
-      .getChampionMasteryById(summonerExternal.id)
-      .then(data => {
-        summonerExternal.mastery = data;
-      });
+    // await this.masteryService
+    //   .getChampionMasteryById(summonerExternal.id, params.region)
+    //   .then(data => {
+    //     summonerExternal.mastery = data;
+    //   });
     return summonerExternal;
   }
 }

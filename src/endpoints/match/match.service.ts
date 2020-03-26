@@ -10,55 +10,67 @@ import { QueueType } from 'src/models/enums/queue.enum';
 @Injectable()
 export class MatchService {
   constructor(private httpService: HttpService) {}
-  private _api: Api = new Api();
 
-  async getMatchHistoryByAccountId(accountId: string, start?: string, end?: string) {
+  async getMatchHistoryByAccountId(
+    accountId: string,
+    region: string,
+    start?: string,
+    end?: string,
+  ) {
+    const api: Api = new Api();
+    api.setRegion(region);
+
     let matchListDTO: MatchListDTO;
     await this.httpService
-      .get(this._api.getMatchHistoryURL(accountId, start, end))
+      .get(api.getMatchHistoryURL(accountId, start, end))
       .pipe(map(response => (matchListDTO = response.data)))
       .toPromise();
-    
+
     const matchList: MatchList = matchListDTO;
 
     return matchList;
   }
 
-  async getMatchDataFromMatchId(matchId: string, summonerId: string) {
-      let matchDTO: MatchDTO;
-      await this.httpService
-      .get(this._api.getMatchDataURL(matchId))
+  async getMatchDataByMatchId(matchId: string, summonerId: string, region: string) {
+    const api: Api = new Api();
+    api.setRegion(region);
+
+    let matchDTO: MatchDTO;
+    await this.httpService
+      .get(api.getMatchDataURL(matchId))
       .pipe(map(response => (matchDTO = response.data)))
       .toPromise();
 
-      const matchExternal: MatchExternal = new MatchExternal();
-      matchExternal.gameId = matchDTO.gameId;
-      matchExternal.queueType = QueueType['QUEUE_' + matchDTO.queueId];
-      matchExternal.gameCreation = new Date(matchDTO.gameCreation - matchDTO.gameDuration);
-      matchExternal.gameDuration = matchDTO.gameDuration;
-      
-      let participantId: number;
-      Object.values(matchDTO.participantIdentities).forEach(element => {
-        if (element.player.summonerId == summonerId) {
-          participantId = element.participantId;
-        }
-      });
+    const matchExternal: MatchExternal = new MatchExternal();
+    matchExternal.gameId = matchDTO.gameId;
+    matchExternal.queueType = QueueType['QUEUE_' + matchDTO.queueId];
+    matchExternal.gameCreation = new Date(
+      matchDTO.gameCreation - matchDTO.gameDuration,
+    );
+    matchExternal.gameDuration = matchDTO.gameDuration;
 
-      Object.values(matchDTO.participants).forEach(element => {
-        if (element.participantId == participantId) {
-          matchExternal.championId = element.championId;
-          matchExternal.kills = element['stats']['kills'];
-          matchExternal.deaths = element['stats']['deaths'];
-          matchExternal.assists = element['stats']['assists'];
-          const teamId = element['teamId'];
-          matchDTO.teams.forEach(element => {
-            if (element.teamId == teamId) {
-              matchExternal.won = (element.win === "Win" ? true : false);
-            }
-          });
-        }
-      });
+    let participantId: number;
+    Object.values(matchDTO.participantIdentities).forEach(element => {
+      if (element.player.summonerId == summonerId) {
+        participantId = element.participantId;
+      }
+    });
 
-      return matchExternal;
+    Object.values(matchDTO.participants).forEach(element => {
+      if (element.participantId == participantId) {
+        matchExternal.championId = element.championId;
+        matchExternal.kills = element['stats']['kills'];
+        matchExternal.deaths = element['stats']['deaths'];
+        matchExternal.assists = element['stats']['assists'];
+        const teamId = element['teamId'];
+        matchDTO.teams.forEach(element => {
+          if (element.teamId == teamId) {
+            matchExternal.won = element.win === 'Win' ? true : false;
+          }
+        });
+      }
+    });
+
+    return matchExternal;
   }
 }

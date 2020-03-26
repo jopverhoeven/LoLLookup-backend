@@ -16,33 +16,29 @@ const common_1 = require("@nestjs/common");
 const summoner_service_1 = require("./summoner.service");
 const summoner_external_1 = require("../../models/external/summoner/summoner.external");
 const mastery_service_1 = require("../mastery/mastery.service");
+const summoner_params_1 = require("./params/summoner.params");
 let SummonerController = class SummonerController {
     constructor(summonerService, masteryService) {
         this.summonerService = summonerService;
         this.masteryService = masteryService;
     }
-    async getSummonerByName(query) {
+    async getSummonerByName(params) {
         let summonerExternal;
         await this.summonerService
-            .getSummonerByName(query['name'])
+            .getSummonerByName(params.name, params.region)
             .then(data => (summonerExternal = data));
-        await this.masteryService
-            .getChampionMasteryById(summonerExternal.id)
-            .then(data => {
-            summonerExternal.mastery = data;
-        });
         return summonerExternal;
     }
 };
 __decorate([
-    common_1.Get(),
-    __param(0, common_1.Query()),
+    common_1.Get(':name'),
+    __param(0, common_1.Param()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [summoner_params_1.SummonerParams]),
     __metadata("design:returntype", Promise)
 ], SummonerController.prototype, "getSummonerByName", null);
 SummonerController = __decorate([
-    common_1.Controller('summoner'),
+    common_1.Controller(':region/summoner'),
     __metadata("design:paramtypes", [summoner_service_1.SummonerService,
         mastery_service_1.MasteryService])
 ], SummonerController);

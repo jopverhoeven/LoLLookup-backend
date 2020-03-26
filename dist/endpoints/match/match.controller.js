@@ -15,13 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const match_service_1 = require("./match.service");
 const matchlist_external_1 = require("../../models/external/match/matchlist.external");
+const matchhistory_params_1 = require("./params/matchhistory.params");
+const match_params_1 = require("./params/match.params");
 let MatchController = class MatchController {
     constructor(matchService) {
         this.matchService = matchService;
     }
-    async getMatchHistoryByAccountId(query) {
+    async getMatchHistoryByAccountId(params, query) {
         let matchHistoryExternal;
-        await this.matchService.getMatchHistoryByAccountId(query['id'], query['start'], query['end']).then(data => {
+        await this.matchService.getMatchHistoryByAccountId(params.accountId, params.region, query['start'], query['end']).then(data => {
             matchHistoryExternal = data;
             matchHistoryExternal.matches.forEach(element => {
                 element.date = new Date(element.timestamp);
@@ -29,30 +31,30 @@ let MatchController = class MatchController {
         });
         return matchHistoryExternal;
     }
-    async getGameByMatchId(query) {
+    async getMatchByMatchId(params) {
         let matchExternal;
-        await this.matchService.getMatchDataFromMatchId(query['gameId'], query['summonerId']).then(data => {
+        await this.matchService.getMatchDataByMatchId(params.matchId, params.summonerId, params.region).then(data => {
             matchExternal = data;
         });
         return matchExternal;
     }
 };
 __decorate([
-    common_1.Get(),
-    __param(0, common_1.Query()),
+    common_1.Get(':accountId'),
+    __param(0, common_1.Param()), __param(1, common_1.Query()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [matchhistory_params_1.MatchHistoryParams, Object]),
     __metadata("design:returntype", Promise)
 ], MatchController.prototype, "getMatchHistoryByAccountId", null);
 __decorate([
-    common_1.Get('game'),
-    __param(0, common_1.Query()),
+    common_1.Get(':matchId/:summonerId'),
+    __param(0, common_1.Param()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [match_params_1.MatchParams]),
     __metadata("design:returntype", Promise)
-], MatchController.prototype, "getGameByMatchId", null);
+], MatchController.prototype, "getMatchByMatchId", null);
 MatchController = __decorate([
-    common_1.Controller('match'),
+    common_1.Controller(':region/match'),
     __metadata("design:paramtypes", [match_service_1.MatchService])
 ], MatchController);
 exports.MatchController = MatchController;

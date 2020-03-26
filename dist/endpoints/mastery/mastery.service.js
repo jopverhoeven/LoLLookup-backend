@@ -19,12 +19,13 @@ let MasteryService = class MasteryService {
     constructor(httpService, championService) {
         this.httpService = httpService;
         this.championService = championService;
-        this._api = new Api_1.Api();
     }
-    async getChampionMasteryById(id) {
+    async getChampionMasteryById(id, region) {
+        const api = new Api_1.Api();
+        api.setRegion(region);
         let masteryDTO;
         await this.httpService
-            .get(this._api.getMasteryURL(id))
+            .get(api.getMasteryURL(id))
             .pipe(operators_1.map(response => (masteryDTO = response.data)))
             .toPromise();
         const mastery = masteryDTO;

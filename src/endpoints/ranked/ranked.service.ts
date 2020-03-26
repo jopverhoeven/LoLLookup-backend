@@ -8,12 +8,14 @@ import { RankedEnum } from 'src/models/enums/ranked.enum';
 @Injectable()
 export class RankedService {
   constructor(private httpService: HttpService) {}
-  private _api: Api = new Api();
 
-  async getRankedDataBySummonerId(id: string): Promise<Ranked[]> {
+  async getRankedDataBySummonerId(id: string, region: string): Promise<Ranked[]> {
+    const api: Api = new Api();
+    api.setRegion(region);
+
     let rankedDTO: RankedDTO[];
     await this.httpService
-      .get(this._api.getRankedURL(id))
+      .get(api.getRankedURL(id))
       .pipe(map(response => (rankedDTO = response.data)))
       .toPromise();
 
