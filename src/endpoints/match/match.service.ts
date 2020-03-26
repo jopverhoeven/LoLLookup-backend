@@ -31,7 +31,7 @@ export class MatchService {
     return matchList;
   }
 
-  async getMatchDataFromMatchId(matchId: string, summonerId: string, region: string) {
+  async getMatchDataByMatchId(matchId: string, summonerId: string, region: string) {
     const api: Api = new Api();
     api.setRegion(region);
 

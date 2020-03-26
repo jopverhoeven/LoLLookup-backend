@@ -29,7 +29,7 @@ export class Api {
     let riotRegionName: string;
     for (let index = 0; index < REGIONS.length; index++) {
       const element = REGIONS[index];
-      if (element.internalname === region) {
+      if (element.internalname.toLowerCase() === region.toLowerCase()) {
         riotRegionName = element.riotname;
         break;
       }

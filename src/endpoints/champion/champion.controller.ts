@@ -1,7 +1,7 @@
-import { Controller, Get, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { ChampionService } from './champion.service';
 import { ChampionExternal } from 'src/models/external/champion/champion.external';
-import { ChampionSubmit } from 'src/models/submit/champion/champion.submit';
+import { ChampionParams } from './champion.params';
 
 @Controller('champion')
 export class ChampionController {
@@ -12,10 +12,9 @@ export class ChampionController {
     return this.championService.getChampionList();
   }
 
-  @Get()
-  async getChampions(@Body() championSubmit: ChampionSubmit): Promise<ChampionExternal> {
-    const championId = championSubmit.championId;
-    const externalChampion: ChampionExternal = this.championService.getChampionById(championId);
+  @Get(':championId')
+  async getChampions(@Param() params: ChampionParams): Promise<ChampionExternal> {
+    const externalChampion: ChampionExternal = this.championService.getChampionById(params.championId);
     if (externalChampion == null) {
       throw new HttpException('Champion Not Found', HttpStatus.BAD_REQUEST);
     }
