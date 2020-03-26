@@ -12,13 +12,14 @@ export class MasteryService {
     private championService: ChampionService,
   ) {}
 
-  private _api: Api = new Api();
+  async getChampionMasteryById(id: string, region: string): Promise<Mastery[]> {
+    const api: Api = new Api();
+    api.setRegion(region);
 
-  async getChampionMasteryById(id: string): Promise<Mastery[]> {
     let masteryDTO: MasteryDTO[];
 
     await this.httpService
-      .get(this._api.getMasteryURL(id))
+      .get(api.getMasteryURL(id))
       .pipe(map(response => (masteryDTO = response.data)))
       .toPromise();
 
