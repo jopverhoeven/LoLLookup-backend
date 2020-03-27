@@ -45,6 +45,43 @@ let MatchService = class MatchService {
         matchExternal.queueType = queue_enum_1.QueueType['QUEUE_' + matchDTO.queueId];
         matchExternal.gameCreation = new Date(matchDTO.gameCreation - matchDTO.gameDuration);
         matchExternal.gameDuration = matchDTO.gameDuration;
+        matchExternal.teams = [];
+        Object.values(matchDTO.teams).forEach(teamDTO => {
+            const team = new match_external_1.MatchTeamExternal();
+            team.bans = teamDTO.bans;
+            team.baronKills = teamDTO.baronKills;
+            team.dragonKills = teamDTO.dragonKills;
+            team.inhibitorKills = teamDTO.inhibitorKills;
+            team.towerKills = teamDTO.towerKills;
+            team.riftHeraldKills = teamDTO.riftHeraldKills;
+            team.firstBaron = teamDTO.firstBaron;
+            team.firstBlood = teamDTO.firstBlood;
+            team.firstDragon = teamDTO.firstDragon;
+            team.firstInhibitor = teamDTO.firstInhibitor;
+            team.firstRiftHerald = teamDTO.firstRiftHerald;
+            team.firstTower = teamDTO.firstTower;
+            team.players = [];
+            matchDTO.participants.forEach(participantDTO => {
+                const player = new match_external_1.MatchTeamPlayerExternal();
+                if (participantDTO.teamId == teamDTO.teamId) {
+                    player.championId = participantDTO.championId;
+                    player.kills = participantDTO.stats.kills;
+                    player.deaths = participantDTO.stats.deaths;
+                    player.assists = participantDTO.stats.assists;
+                    player.items = [];
+                    player.items.push(participantDTO.stats.item0, participantDTO.stats.item1, participantDTO.stats.item2, participantDTO.stats.item3, participantDTO.stats.item4, participantDTO.stats.item5, participantDTO.stats.item6);
+                    player.summonerSpell1 = participantDTO.spell1Id;
+                    player.summonerSpell2 = participantDTO.spell2Id;
+                    Object.values(matchDTO.participantIdentities).forEach(element => {
+                        if (element.participantId == participantDTO.participantId) {
+                            player.summonerName = element.player.summonerName;
+                        }
+                    });
+                    team.players.push(player);
+                }
+            });
+            matchExternal.teams.push(team);
+        });
         let participantId;
         Object.values(matchDTO.participantIdentities).forEach(element => {
             if (element.player.summonerId == summonerId) {
@@ -54,10 +91,14 @@ let MatchService = class MatchService {
         Object.values(matchDTO.participants).forEach(element => {
             if (element.participantId == participantId) {
                 matchExternal.championId = element.championId;
-                matchExternal.kills = element['stats']['kills'];
-                matchExternal.deaths = element['stats']['deaths'];
-                matchExternal.assists = element['stats']['assists'];
-                const teamId = element['teamId'];
+                matchExternal.kills = element.stats.kills;
+                matchExternal.deaths = element.stats.deaths;
+                matchExternal.assists = element.stats.assists;
+                matchExternal.spell1 = element.spell1Id;
+                matchExternal.spell2 = element.spell2Id;
+                matchExternal.itemIds = [];
+                matchExternal.itemIds.push(element.stats.item0, element.stats.item1, element.stats.item2, element.stats.item3, element.stats.item4, element.stats.item5, element.stats.item6);
+                const teamId = element.teamId;
                 matchDTO.teams.forEach(element => {
                     if (element.teamId == teamId) {
                         matchExternal.won = element.win === 'Win' ? true : false;

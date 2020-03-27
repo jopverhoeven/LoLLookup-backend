@@ -4,7 +4,7 @@ export interface ITeamStats {
     firstInhibitor: boolean;
     bans: ITeamBans[];
     baronKills: number;
-    firstRiftHerald: number;
+    firstRiftHerald: boolean;
     firstBaron: boolean;
     riftHeraldKills: number;
     firstBlood: boolean;

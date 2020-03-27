@@ -14,6 +14,7 @@ const Api_1 = require("../../constants/Api");
 const map_1 = require("rxjs/internal/operators/map");
 const champion_internal_1 = require("../../models/internal/champion/champion.internal");
 const Champion_1 = require("../../constants/Champion");
+const summonerspell_external_1 = require("../../models/external/champion/summonerspell.external");
 let ChampionService = class ChampionService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -23,8 +24,12 @@ let ChampionService = class ChampionService {
         await this.getChampionData().then(data => {
             this.championData = data;
             this.sortChampionData();
+            console.log('ChampionData retrieved');
         });
-        console.log('Done sorting champs');
+        await this.getSummonerSpellData().then(data => {
+            this.summonerSpellData = data;
+            console.log('SummonerSpellData retrieved');
+        });
     }
     sortChampionData() {
         Object.keys(this.championData['data']).forEach(championKey => {
@@ -50,6 +55,16 @@ let ChampionService = class ChampionService {
             .toPromise();
         return championObject;
     }
+    async getSummonerSpellData() {
+        let summonerSpellData;
+        await this.httpService
+            .get('http://ddragon.leagueoflegends.com/cdn/10.6.1/data/en_US/summoner.json')
+            .pipe(map_1.map(response => {
+            summonerSpellData = response.data;
+        }))
+            .toPromise();
+        return summonerSpellData;
+    }
     getChampionList() {
         return Champion_1.CHAMPION_LIST;
     }
@@ -61,6 +76,17 @@ let ChampionService = class ChampionService {
             }
         }
         return null;
+    }
+    async getSummonerSpellById(summonerSpellId) {
+        const summonerSpellExternal = new summonerspell_external_1.SummonerSpellExternal();
+        Object.keys(this.summonerSpellData['data']).forEach(element => {
+            if (this.summonerSpellData['data'][element]['key'] == summonerSpellId) {
+                summonerSpellExternal.summonerSpellURL = this.summonerSpellData['data'][element]['image']['full'];
+                summonerSpellExternal.key = this.summonerSpellData['data'][element]['key'];
+                summonerSpellExternal.name = this.summonerSpellData['data'][element]['name'];
+            }
+        });
+        return summonerSpellExternal;
     }
 };
 ChampionService = __decorate([
