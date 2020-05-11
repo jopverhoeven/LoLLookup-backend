@@ -1,0 +1,19 @@
+import { ITeamStats } from 'src/models/interfaces/match/teamstats.interface';
+export declare class TeamStatsDTO implements ITeamStats {
+    firstDragon: boolean;
+    firstInhibitor: boolean;
+    bans: import('../../interfaces/match/teambans.interface').ITeamBans[];
+    baronKills: number;
+    firstRiftHerald: boolean;
+    firstBaron: boolean;
+    riftHeraldKills: number;
+    firstBlood: boolean;
+    teamId: number;
+    firstTower: boolean;
+    vilemawKills: number;
+    inhibitorKills: number;
+    towerKills: number;
+    dominionVictoryScore: number;
+    win: string;
+    dragonKills: number;
+}

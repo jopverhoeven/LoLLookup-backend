@@ -1,4 +1,4 @@
-import { MatchExternal } from './../../models/external/match/match.external';
+import { MatchExternal, MatchTeamExternal, MatchTeamPlayerExternal } from './../../models/external/match/match.external';
 import { Injectable, HttpService } from '@nestjs/common';
 import { Api } from 'src/constants/Api';
 import { MatchListDTO } from 'src/models/dto/match/matchlist.dto';
@@ -49,6 +49,57 @@ export class MatchService {
     );
     matchExternal.gameDuration = matchDTO.gameDuration;
 
+    matchExternal.teams = [];
+    Object.values(matchDTO.teams).forEach(teamDTO => {
+      const team: MatchTeamExternal = new MatchTeamExternal();
+      team.bans = teamDTO.bans;
+      team.baronKills = teamDTO.baronKills;
+      team.dragonKills = teamDTO.dragonKills;
+      team.inhibitorKills = teamDTO.inhibitorKills;
+      team.towerKills = teamDTO.towerKills;
+      team.riftHeraldKills = teamDTO.riftHeraldKills;
+      team.firstBaron = teamDTO.firstBaron;
+      team.firstBlood = teamDTO.firstBlood;
+      team.firstDragon = teamDTO.firstDragon;
+      team.firstInhibitor = teamDTO.firstInhibitor;
+      team.firstRiftHerald = teamDTO.firstRiftHerald;
+      team.firstTower = teamDTO.firstTower;
+
+      //Team players
+      team.players = [];
+      matchDTO.participants.forEach(participantDTO => {
+        const player: MatchTeamPlayerExternal = new MatchTeamPlayerExternal();
+        if (participantDTO.teamId == teamDTO.teamId) {
+          //champion id
+          player.championId = participantDTO.championId;
+          
+          //KDA
+          player.kills = participantDTO.stats.kills;
+          player.deaths = participantDTO.stats.deaths;
+          player.assists = participantDTO.stats.assists;
+
+          //Items
+          player.items = [];
+          player.items.push(participantDTO.stats.item0, participantDTO.stats.item1, participantDTO.stats.item2, participantDTO.stats.item3, participantDTO.stats.item4, participantDTO.stats.item5, participantDTO.stats.item6)
+
+          //Summoner spells
+          player.summonerSpell1 = participantDTO.spell1Id;
+          player.summonerSpell2 = participantDTO.spell2Id;
+
+          //Summoner name for participant
+          Object.values(matchDTO.participantIdentities).forEach(element => {
+            if (element.participantId == participantDTO.participantId) {
+              player.summonerName = element.player.summonerName;
+            }
+          });
+
+          team.players.push(player);
+        }
+      });
+
+      matchExternal.teams.push(team);
+    });
+
     let participantId: number;
     Object.values(matchDTO.participantIdentities).forEach(element => {
       if (element.player.summonerId == summonerId) {
@@ -59,10 +110,16 @@ export class MatchService {
     Object.values(matchDTO.participants).forEach(element => {
       if (element.participantId == participantId) {
         matchExternal.championId = element.championId;
-        matchExternal.kills = element['stats']['kills'];
-        matchExternal.deaths = element['stats']['deaths'];
-        matchExternal.assists = element['stats']['assists'];
-        const teamId = element['teamId'];
+        matchExternal.kills = element.stats.kills;
+        matchExternal.deaths = element.stats.deaths;
+        matchExternal.assists = element.stats.assists;
+        matchExternal.spell1 = element.spell1Id;
+        matchExternal.spell2 = element.spell2Id;
+
+        matchExternal.itemIds = []
+        matchExternal.itemIds.push(element.stats.item0, element.stats.item1, element.stats.item2, element.stats.item3, element.stats.item4, element.stats.item5, element.stats.item6);
+
+        const teamId = element.teamId;
         matchDTO.teams.forEach(element => {
           if (element.teamId == teamId) {
             matchExternal.won = element.win === 'Win' ? true : false;

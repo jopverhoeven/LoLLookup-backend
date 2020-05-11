@@ -5,7 +5,7 @@ export class TeamStatsDTO implements ITeamStats {
   firstInhibitor: boolean;
   bans: import('../../interfaces/match/teambans.interface').ITeamBans[];
   baronKills: number;
-  firstRiftHerald: number;
+  firstRiftHerald: boolean;
   firstBaron: boolean;
   riftHeraldKills: number;
   firstBlood: boolean;
