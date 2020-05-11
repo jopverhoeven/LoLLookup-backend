@@ -15,18 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const summoner_service_1 = require("./summoner.service");
 const summoner_external_1 = require("../../models/external/summoner/summoner.external");
-const mastery_service_1 = require("../mastery/mastery.service");
 const summoner_params_1 = require("./params/summoner.params");
+const ApiError_1 = require("../../models/error/ApiError");
 let SummonerController = class SummonerController {
-    constructor(summonerService, masteryService) {
+    constructor(summonerService) {
         this.summonerService = summonerService;
-        this.masteryService = masteryService;
     }
     async getSummonerByName(params) {
         let summonerExternal;
         await this.summonerService
             .getSummonerByName(params.name, params.region)
-            .then(data => (summonerExternal = data));
+            .then(data => (summonerExternal = data))
+            .catch(error => {
+            console.log(error);
+            const apiError = new ApiError_1.ApiError();
+            apiError.errorCode = 'SUMMONER_NOT_FOUND';
+            apiError.errorMessage = 'Could not find summoner with name \'' + params.name + '\'';
+            throw new common_1.HttpException(apiError, common_1.HttpStatus.BAD_REQUEST);
+        });
         return summonerExternal;
     }
 };
@@ -39,8 +45,7 @@ __decorate([
 ], SummonerController.prototype, "getSummonerByName", null);
 SummonerController = __decorate([
     common_1.Controller(':region/summoner'),
-    __metadata("design:paramtypes", [summoner_service_1.SummonerService,
-        mastery_service_1.MasteryService])
+    __metadata("design:paramtypes", [summoner_service_1.SummonerService])
 ], SummonerController);
 exports.SummonerController = SummonerController;
 //# sourceMappingURL=summoner.controller.js.map

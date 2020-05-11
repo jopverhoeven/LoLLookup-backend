@@ -1493,9 +1493,13 @@
         "version": "cb436d82ead265f822c873995507122130af3dce5213eebdf4df52e669bc6b3f",
         "signature": "5cfa7722c8747b514e610ad1bc90c6aa46acc94c41076710f6c2fac5819ae3d2"
       },
+      "../src/models/error/apierror.ts": {
+        "version": "9a06fcbfe519ae6f7daef14e3845873d29fa0c306d9b05cc098d901951a4bde7",
+        "signature": "fc28dea08d79ad0aef88a6033cc2a1cf848150b3a5b2df545c6e19cb2a054466"
+      },
       "../src/endpoints/summoner/summoner.controller.ts": {
-        "version": "56de7affc812689eaf7a8c66a2b35b865b533315bfd7567684d7f8e101826b06",
-        "signature": "7c70d1b91ccf8771e4d263ee88abcc96d2e654c624737e54d9886cfc5fcc76c1"
+        "version": "d9036c64d1f3d4a2f169e17486490694d53df264dda6cfd691acd969613d30f6",
+        "signature": "02bbd9e5dc1bbf382c7247057dcf84d9600ab584e1b10a0d86c2d3bbb0bbff58"
       },
       "../src/endpoints/summoner/summoner.module.ts": {
         "version": "4187055be92774892c977487063c70e7b2e7b7de94ec874f5b4a355ddc7d9fa4",
@@ -1812,10 +1816,6 @@
       "../src/models/dto/match/teamstats.dto.ts": {
         "version": "7ab03cf0b09e20d6f1adf97f2deed698aaa816bf0f62666639d0f8543c28fc27",
         "signature": "2cb5d4bd5977ea50013114742369d080d4afae79ade6289ad67df433627ce35e"
-      },
-      "../src/models/error/apierror.ts": {
-        "version": "9a06fcbfe519ae6f7daef14e3845873d29fa0c306d9b05cc098d901951a4bde7",
-        "signature": "fc28dea08d79ad0aef88a6033cc2a1cf848150b3a5b2df545c6e19cb2a054466"
       },
       "../src/models/external/ranked/miniseries.external.ts": {
         "version": "5c6f667cfe85bb6898855550d0c7b1d7438a42c34db444209042ae6d80817894",
@@ -5233,12 +5233,18 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "../src/models/error/apierror.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "../src/endpoints/summoner/summoner.controller.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../src/endpoints/summoner/summoner.service.ts",
         "../src/models/external/summoner/summoner.external.ts",
-        "../src/endpoints/mastery/mastery.service.ts",
         "../src/endpoints/summoner/params/summoner.params.ts",
+        "../src/models/error/apierror.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/util.d.ts",
@@ -5904,12 +5910,6 @@
       "../src/models/dto/match/teamstats.dto.ts": [
         "../src/models/interfaces/match/teamstats.interface.ts",
         "../src/models/interfaces/match/teambans.interface.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/util.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../src/models/error/apierror.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/util.d.ts",
@@ -7152,7 +7152,6 @@
       "../src/endpoints/summoner/summoner.controller.ts": [
         "../src/endpoints/summoner/summoner.service.ts",
         "../src/models/external/summoner/summoner.external.ts",
-        "../src/endpoints/mastery/mastery.service.ts",
         "../src/endpoints/summoner/params/summoner.params.ts"
       ],
       "../src/endpoints/summoner/summoner.service.ts": [
