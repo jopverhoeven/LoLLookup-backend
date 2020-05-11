@@ -29,6 +29,9 @@ let MasteryService = class MasteryService {
             .pipe(operators_1.map(response => (masteryDTO = response.data)))
             .toPromise();
         const mastery = masteryDTO;
+        for (const item of mastery) {
+            item.champion = this.championService.getChampionById(item.championId);
+        }
         return mastery;
     }
 };

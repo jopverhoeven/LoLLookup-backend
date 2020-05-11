@@ -25,9 +25,9 @@ export class MasteryService {
 
     const mastery: Mastery[] = masteryDTO;
 
-    // for(const item of mastery) {
-    //     item.championName = this.championService.getChampionNameById(item.championId);
-    // }
+    for(const item of mastery) {
+        item.champion = this.championService.getChampionById(item.championId);
+    }
 
     return mastery;
   }

@@ -1,7 +1,8 @@
 import { IMastery } from 'src/models/interfaces/mastery/mastery.interface';
+import { Champion } from '../champion/champion.internal';
 export declare class Mastery implements IMastery {
     chestGranted: boolean;
-    championName?: string;
+    champion?: Champion;
     championLevel: number;
     championPoints: number;
     championId: number;
